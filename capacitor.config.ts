@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'net.azarquiel.primeraapp',
+  appId: 'com.example.app',
   appName: 'primeraApp2',
   webDir: 'build'
 };

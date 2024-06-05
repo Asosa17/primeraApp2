@@ -1,7 +1,10 @@
 import React from 'react';
 import {
+  IonCol,
   IonContent,
+  IonGrid,
   IonIcon,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -9,6 +12,8 @@ import {
   IonMenu,
   IonMenuToggle,
   IonNote,
+  IonRow,
+  IonText,
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
@@ -69,9 +74,16 @@ const Menu: React.FC = () => {
   return (
     <IonMenu contentId="main" type="overlay">
       <IonContent>
+        <div className="d-flex align-items-center justify-content-center ">
+          <div className="me-4">
+            <img src="/assets/icon/favicon.png" />
+          </div>
+          <div className="  ">
+            <h1 className="p-0 m-0">Menu</h1>
+            <p className="p-0 m-0">NombreUser</p>
+          </div>
+        </div>
         <IonList id="inbox-list">
-          <IonListHeader>Menu</IonListHeader>
-          <IonNote>Nombre de Usuario</IonNote>
           {appPages.map((appPage, index) => {
             return (
               <IonMenuToggle key={index} autoHide={false}>
@@ -84,7 +96,7 @@ const Menu: React.FC = () => {
           })}
         </IonList>
 
-        
+
       </IonContent>
     </IonMenu>
   );
