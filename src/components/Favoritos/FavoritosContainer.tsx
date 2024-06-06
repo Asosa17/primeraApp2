@@ -3,7 +3,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 
 const Favoritos: React.FC = () => {
   return (
-    <IonPage>
+    <IonContent>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Favoritos</IonTitle>
@@ -15,7 +15,7 @@ const Favoritos: React.FC = () => {
           <p>Aquí puedes ver tus rutinas y dietas favoritas.</p>
         </div>
       </IonContent>
-    </IonPage>
+    </IonContent>
   );
 };
 

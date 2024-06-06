@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "13387498995",
+    "project_id": "pruebas2damsosa",
+    "storage_bucket": "pruebas2damsosa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13387498995:android:27e2ac008a847170307e86",
+        "android_client_info": {
+          "package_name": "net.azarquiel.autenticacionfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY49mmfN_jXCY6JiJExlLm1sL265ki5rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13387498995:android:a7ddbe9dacb06f86307e86",
+        "android_client_info": {
+          "package_name": "net.azarquiel.chatfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY49mmfN_jXCY6JiJExlLm1sL265ki5rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13387498995:android:2720a51a7486bb9a307e86",
+        "android_client_info": {
+          "package_name": "net.azarquiel.primeraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY49mmfN_jXCY6JiJExlLm1sL265ki5rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13387498995:android:5306a48ec0b5aced307e86",
+        "android_client_info": {
+          "package_name": "net.azarquiel.pruebafotos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY49mmfN_jXCY6JiJExlLm1sL265ki5rU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13387498995-07t0jjf01c8opa336ai7uako94m20hfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

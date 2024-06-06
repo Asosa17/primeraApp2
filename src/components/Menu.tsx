@@ -29,14 +29,14 @@ interface AppPage {
 
 const appPages: AppPage[] = [
   {
-    title: 'Home',
-    url: '/page/Home',
+    title: 'Componentes',
+    url: '/page/Componentes',
     iosIcon: mailOutline,
     mdIcon: homeOutline
   },
   {
-    title: 'Rutinas',
-    url: '/page/Rutinas',
+    title: 'Firebase',
+    url: '/page/Firebase',
     iosIcon: paperPlaneOutline,
     mdIcon: rocketOutline
   },

@@ -2,8 +2,8 @@ import React from 'react';
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useParams } from 'react-router';
 import './Page.css';
-import Home from '../components/Home/HomeContainer';
-import Rutinas from '../components/Rutinas/RutinasContainer';
+import Home from '../components/Componentes/ComponentesContainer';
+import Rutinas from '../components/Firebase/FirebaseContainer';
 import Dietas from '../components/Dietas/DietasContainer';
 import Favoritos from '../components/Favoritos/FavoritosContainer';
 import Chat from '../components/Chat/ChatContainer';
@@ -15,14 +15,9 @@ const Page: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>{name}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
 
       <IonContent fullscreen>
         <IonHeader collapse="condense">
@@ -30,9 +25,9 @@ const Page: React.FC = () => {
             <IonTitle size="large">{name}</IonTitle>
           </IonToolbar>
         </IonHeader>
-        { name=="Home" ?
+        { name=="Componentes" ?
         <Home/>
-        : name=="Rutinas" ?
+        : name=="Firebase" ?
         <Rutinas/>
         :name=="Favoritos" ?
         <Favoritos/>
