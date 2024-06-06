@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth, db } from '../../Firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { IonButton, IonContent, IonInput, IonLabel, IonPage } from '@ionic/react';
-import { collection, addDoc, getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc } from 'firebase/firestore';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage } from '@ionic/react';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { collection, addDoc, getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc, getDocs } from 'firebase/firestore';
 
 const Firebase: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -28,6 +29,49 @@ const Firebase: React.FC = () => {
   const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState<boolean>();
 
+  const [passwords, setPasswords] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [ejercicios, setEjercicios] = useState<any[]>([]);
+  const [cochesMap, setCochesMap] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [visibleEjercicios, setVisibleEjercicios] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchEjercicios = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECTORALES', 'EJERCICIOS'));
+        const ejerciciosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setEjercicios(ejerciciosData);
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al obtener los ejercicios: ', error);
+        setLoading(false);
+      }
+    };
+
+    fetchEjercicios();
+  }, []);
+
+  const loadEjercicios = async () => {
+    try {
+      setLoading(true); // Mostrar el indicador de carga
+  
+      const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECHO', 'EJERCICIOS'));
+      const ejerciciosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setEjercicios(ejerciciosData);
+      setVisibleEjercicios(ejercicios);
+      setLoading(false); // Ocultar el indicador de carga
+    } catch (error) {
+      console.error('Error al obtener los ejercicios: ', error);
+      setLoading(false); // Asegurarse de ocultar el indicador de carga en caso de error
+    }
+  };
+
+  if (loading) {
+    return <p>Cargando ejercicios...</p>;
+  }
   const handleSignUp = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -173,7 +217,6 @@ const Firebase: React.FC = () => {
       }, 1500);
     }
   }
-
   //validar email
   const validateEmail = (email: string) => {
     return email.match(
@@ -189,7 +232,7 @@ const Firebase: React.FC = () => {
     if (value === '') return;
 
     validateEmail(value) !== null ? setIsValid(true) : setIsValid(false);
-    if(isValid){
+    if (isValid) {
       setEmail(value)
     }
   };
@@ -221,20 +264,27 @@ const Firebase: React.FC = () => {
             onIonInput={(event) => validate(event)}
             onIonBlur={() => markTouched()}
           ></IonInput>
-          
+
         </div>
         <div className="caja2 p-2   text-start">
-          <IonInput type='password'
-            value={password}
-            onIonInput={(e: CustomEvent) => setPassword(e.detail.value)}
-            label="Password"
-            counter={true}
-            labelPlacement="floating" 
-            fill="solid"
-            maxlength={20}
-            counterFormatter={(inputLength, maxlength) => `faltan ${Math.max(0, 6 - inputLength)} caracteres`}
-          >
-          </IonInput >
+          <IonItem className='align-items-center'>
+            <IonLabel position="floating">Password</IonLabel>
+            <IonInput
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onIonInput={(e: CustomEvent) => setPassword(e.detail.value as string)}
+              counter={true}
+              maxlength={20}
+              counterFormatter={(inputLength, maxlength) => `faltan ${Math.max(0, 6 - inputLength)} caracteres`}
+            />
+            <IonIcon
+              slot="end"
+
+              icon={showPassword ? eyeOffOutline : eyeOutline}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ cursor: 'pointer' }}
+            />
+          </IonItem>
         </div>
         <div>
           <IonButton onClick={handleSignUp} className='me-2' color={buttonColorReg}>Registrarse</IonButton>
@@ -313,6 +363,23 @@ const Firebase: React.FC = () => {
           <IonButton onClick={handleCoche} color={buttonColorCoche}>Agregar Coche</IonButton>
         </div>
         <IonLabel>{alertaCoche}</IonLabel>
+      </div>
+
+
+      <h1 className='text-center'>Pintar datos de la bbdd</h1>
+      <div className='container w-75'>
+      <button onClick={loadEjercicios}>Cargar Ejercicios</button>
+        <IonList>
+          {visibleEjercicios.slice(0, 10).map(ejercicio => (
+            <IonItem key={ejercicio.id}>
+              <IonLabel>
+                <h2>{ejercicio.nombre}</h2>
+                <p>{ejercicio.descripcion}</p>
+                <p>{ejercicio.id}</p>
+              </IonLabel>
+            </IonItem>
+          ))}
+        </IonList>
       </div>
     </IonContent>
   );
