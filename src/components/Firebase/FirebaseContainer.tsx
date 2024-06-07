@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { auth, db, storage } from '../../Firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { collection, addDoc, getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc, getDocs } from 'firebase/firestore';
@@ -38,6 +38,8 @@ const Firebase: React.FC = () => {
   const [cochesMap, setCochesMap] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [imagen, setImagen] = useState<File | null>(null);
+  const referencia = useRef<HTMLInputElement | null>(null);
 
   const loadEjerciciosFoto = async () => {
     try {
@@ -251,6 +253,22 @@ const Firebase: React.FC = () => {
     setIsTouched(true);
   };
 
+
+  const handleSubir = async () => {
+    if (imagen === null) {
+      alert('Imagen no valida');
+      return;
+    }
+    if (email === '') {
+      alert('Inicie sesion para subir archivos');
+      return;
+    }
+    const storageRef =  ref(storage, `/Users/${email}/${imagen.name}`); 
+    await uploadBytes(storageRef, imagen)
+    
+  };
+
+
   return (
     <IonContent className="text-center container">
       <h1 className='text-center'>Registro con Firebase y Auth</h1>
@@ -414,6 +432,18 @@ const Firebase: React.FC = () => {
         </IonList>
       </div>
 
+      <div>
+        <div>
+          <input type="file" accept="image/*" ref={referencia} onChange={(e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+              const archivo = files[0];
+              setImagen(archivo);
+            }
+          }} />
+        </div>
+        <IonButton onClick={handleSubir}>Subir imagen</IonButton>
+      </div>
     </IonContent>
   );
 };
