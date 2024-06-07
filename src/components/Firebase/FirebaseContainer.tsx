@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { auth, db } from '../../Firebase/firebaseConfig';
+import { auth, db, storage } from '../../Firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage } from '@ionic/react';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { collection, addDoc, getFirestore, doc, setDoc, getDoc, arrayUnion, updateDoc, getDocs } from 'firebase/firestore';
@@ -33,39 +34,48 @@ const Firebase: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [ejercicios, setEjercicios] = useState<any[]>([]);
+  const [ejerciciosF, setEjerciciosF] = useState<any[]>([]);
   const [cochesMap, setCochesMap] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [visibleEjercicios, setVisibleEjercicios] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchEjercicios = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECTORALES', 'EJERCICIOS'));
-        const ejerciciosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setEjercicios(ejerciciosData);
-        
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener los ejercicios: ', error);
-        setLoading(false);
-      }
-    };
 
-    fetchEjercicios();
-  }, []);
-
-  const loadEjercicios = async () => {
+  const loadEjerciciosFoto = async () => {
     try {
       setLoading(true); // Mostrar el indicador de carga
-  
-      const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECHO', 'EJERCICIOS'));
-      const ejerciciosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEjercicios(ejerciciosData);
-      setVisibleEjercicios(ejercicios);
+
+      const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECTORALES', 'EJERCICIOS'));
+
+      const ejerciciosData = await Promise.all(querySnapshot.docs.map(async (doc) => {
+        const data = doc.data();
+        const id = doc.id;
+
+        try {
+          const imageUrl = await getDownloadURL(ref(storage, `/EJERCICIOS/PECTORALES/${id}.gif`));
+          console.log(imageUrl);
+          return { id, ...data, imageUrl };
+        } catch (error) {
+          // Si no se puede obtener la URL de la imagen, devolvemos el ejercicio sin imagen
+          return { id, ...data };
+        }
+      }));
+
+      setEjerciciosF(ejerciciosData.slice(0, 15));
       setLoading(false); // Ocultar el indicador de carga
     } catch (error) {
       console.error('Error al obtener los ejercicios: ', error);
       setLoading(false); // Asegurarse de ocultar el indicador de carga en caso de error
+    }
+  };
+  const loadEjercicios = async () => {
+    setLoading(true);
+    try {
+      const querySnapshot = await getDocs(collection(db, 'CATEGORIAS', 'PECTORALES', 'EJERCICIOS'));
+      const ejerciciosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setEjercicios(ejerciciosData.slice(0, 15)); // Limitar a 15 ejercicios
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los ejercicios: ', error);
+      setLoading(false);
     }
   };
 
@@ -368,9 +378,10 @@ const Firebase: React.FC = () => {
 
       <h1 className='text-center'>Pintar datos de la bbdd</h1>
       <div className='container w-75'>
-      <button onClick={loadEjercicios}>Cargar Ejercicios</button>
-        <IonList>
-          {visibleEjercicios.slice(0, 10).map(ejercicio => (
+        <IonButton onClick={loadEjercicios}>Cargar Ejercicios</IonButton>
+        <IonList className='mt-3'>
+          {/*Limitar a 5 ejs*/}
+          {ejercicios.slice(0, 5).map(ejercicio => (
             <IonItem key={ejercicio.id}>
               <IonLabel>
                 <h2>{ejercicio.nombre}</h2>
@@ -381,6 +392,28 @@ const Firebase: React.FC = () => {
           ))}
         </IonList>
       </div>
+
+      <h1 className='text-center'>Pintar datos de la bbdd con fotos desde el storage</h1>
+      <div className='container-fluid w-75'>
+        <IonButton onClick={loadEjerciciosFoto}>Cargar Ejercicios</IonButton>
+        <IonList className='mt-3 px-3'>
+          {/*Limitar a 5 ejs*/}
+          {ejerciciosF.slice(0, 5).map(ejercicio => (
+            <div key={ejercicio.id} className='mt-3'>
+              <div className='row'>
+                {ejercicio.imageUrl && <img src={ejercicio.imageUrl} alt={ejercicio.nombre} className=' img-fluid col-md-4' />}
+                <div className='p-3 text-start col-md-8'>
+                  <p>{ejercicio.id}</p>
+                  <h5 >{ejercicio.nombre}</h5>
+                  <p className='fs-6 '>{ejercicio.descripcion}</p>
+
+                </div>
+              </div>
+            </div>
+          ))}
+        </IonList>
+      </div>
+
     </IonContent>
   );
 };
